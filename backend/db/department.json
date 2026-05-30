@@ -1,0 +1,32 @@
+[
+  {
+    "id": "dept_tik",
+    "image_url": "uploads/logo_tik.png",
+    "department_name": "TIK",
+    "department_study_program": [
+      "TI",
+      "TMD",
+      "TMJ",
+      "RKS"
+    ]
+  },
+  {
+    "id": "dept_te",
+    "image_url": "uploads/logo_te.png",
+    "department_name": "Teknik Elektro",
+    "department_study_program": [
+      "Teknik Telekomunikasi",
+      "Teknik Elektronika Industri",
+      "Broadcasting"
+    ]
+  },
+  {
+    "id": "dept_an",
+    "image_url": "uploads/logo_an.png",
+    "department_name": "Administrasi Niaga",
+    "department_study_program": [
+      "Administrasi Bisnis Terapan",
+      "Usaha Jasa Pariwisata"
+    ]
+  }
+]

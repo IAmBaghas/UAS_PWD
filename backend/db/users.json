@@ -1,0 +1,13 @@
+[
+    {
+        "id": "usr_admin",
+        "username": "admin",
+        "password": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
+        "name": "Administrator",
+        "email": "admin@example.com",
+        "role": "admin",
+        "status": "active",
+        "createdAt": "2026-05-30T17:00:00.000Z",
+        "updatedAt": "2026-05-30T17:00:00.000Z"
+    }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "banner_1",
+    "title": "Welcome to PNJ Engineering",
+    "subtitle": "Discover cutting-edge research, outstanding study programs, and an active student community.",
+    "imageUrl": "uploads/banner_pnj.jpg",
+    "linkUrl": "/pages/department.html",
+    "order": 1,
+    "isActive": true,
+    "createdAt": "2026-05-30T17:00:00.000Z"
+  },
+  {
+    "id": "banner_2",
+    "title": "Information & Communication Technology",
+    "subtitle": "Preparing future innovators and engineers in the field of Software, Cybersecurity, and Multimedia.",
+    "imageUrl": "uploads/banner_tik.jpg",
+    "linkUrl": "/pages/department.html#tik",
+    "order": 2,
+    "isActive": true,
+    "createdAt": "2026-05-30T17:05:00.000Z"
+  },
+  {
+    "id": "banner_3",
+    "title": "Admissions Now Open",
+    "subtitle": "Join us for the 2026 academic year. Discover your potential and shape a brighter future.",
+    "imageUrl": "uploads/banner_admission.jpg",
+    "linkUrl": "/pages/admission.html",
+    "order": 3,
+    "isActive": true,
+    "createdAt": "2026-05-30T17:10:00.000Z"
+  }
+]
