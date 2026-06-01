@@ -24,9 +24,16 @@ export const header = () => {
         <nav class="hidden md:flex items-center gap-6">${navLinks(links)}</nav>
         <div class="flex items-center gap-4">
           ${button({ label: 'Hubungi Kami', href: '#kontak', variant: 'primary', className: 'hidden md:inline-flex px-6 py-2 rounded-full' })}
-          <button class="md:hidden text-primary p-2" aria-label="Open menu">
+          <button id="hamburger-btn" class="md:hidden text-primary p-2" aria-label="Open menu">
             <span class="material-symbols-outlined">menu</span>
           </button>
+        </div>
+      </div>
+      <!-- Mobile Menu Dropdown -->
+      <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-surface/95 backdrop-blur-md border-b border-outline-variant shadow-lg flex-col px-container-margin-mobile py-6 gap-6">
+        <nav class="flex flex-col gap-6 items-center">${navLinks(links)}</nav>
+        <div class="flex justify-center mt-2">
+          ${button({ label: 'Hubungi Kami', href: '#kontak', variant: 'primary', className: 'px-8 py-3 rounded-full' })}
         </div>
       </div>
     </header>

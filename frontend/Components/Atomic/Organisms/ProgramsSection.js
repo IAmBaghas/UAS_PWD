@@ -50,13 +50,21 @@ export const programsSection = () => {
       description: 'Membekali mahasiswa dengan kompetensi administrasi, pemasaran, akuntansi dasar, dan pengelolaan bisnis.',
       imageSrc: '/assets/images/jurusan/Administrasi%20Niaga.jpg',
       imageAlt: 'Banner Administrasi Niaga'
+    },
+    {
+      iconName: 'account_balance',
+      category: 'Finance',
+      title: 'Akuntansi',
+      description: 'Fokus pada akuntansi keuangan, manajerial, perpajakan, dan audit untuk mencetak profesional di bidang finansial.',
+      imageSrc: '/assets/images/jurusan/Akuntansi.jpg',
+      imageAlt: 'Banner Akuntansi'
     }
   ];
 
   return `
     <section id="akademik" class="py-section-gap max-w-[1440px] mx-auto px-container-margin-mobile md:px-container-margin-desktop scroll-mt-28">
       ${sectionHeader({ eyebrow: 'Akademik', title: 'Program Unggulan', actionLabel: 'Lihat Semua Jurusan' })}
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-gutter">
+      <div class="flex gap-gutter overflow-x-auto snap-x snap-mandatory pb-8" style="scrollbar-width: none;">
         ${programs.map(programCard).join('')}
       </div>
     </section>
