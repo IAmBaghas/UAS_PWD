@@ -1,1 +1,122 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Politeknik Negeri Jakarta | Official Portal</title>
+	<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+	<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+	<script>
+		tailwind.config = {
+			darkMode: 'class',
+			theme: {
+				extend: {
+					colors: {
+						'tertiary-fixed': '#d4e6e5',
+						'surface-container-highest': '#e2e2e5',
+						'primary-fixed': '#95f2f4',
+						'on-surface-variant': '#3e4949',
+						'tertiary-container': '#677878',
+						surface: '#f9f9fc',
+						'inverse-primary': '#79d5d8',
+						'on-tertiary-fixed-variant': '#3a4a49',
+						'on-primary-container': '#f7ffff',
+						'on-background': '#1a1c1e',
+						'on-tertiary-fixed': '#0e1e1e',
+						'on-secondary-container': '#6c5000',
+						'on-secondary-fixed': '#261a00',
+						background: '#f9f9fc',
+						'surface-container-low': '#f3f3f6',
+						'on-primary': '#ffffff',
+						'surface-container': '#eeeef0',
+						'primary-container': '#128285',
+						'on-primary-fixed': '#002021',
+						'surface-variant': '#e2e2e5',
+						'surface-container-lowest': '#ffffff',
+						'secondary-fixed': '#ffdf9e',
+						primary: '#00676a',
+						secondary: '#785900',
+						outline: '#6e7979',
+						'secondary-fixed-dim': '#fabd00',
+						'on-error': '#ffffff',
+						'tertiary-fixed-dim': '#b8cac9',
+						'secondary-container': '#fdc003',
+						'error-container': '#ffdad6',
+						'surface-dim': '#dadadc',
+						'on-tertiary-container': '#f6fffe',
+						'on-tertiary': '#ffffff',
+						'on-primary-fixed-variant': '#004f51',
+						'outline-variant': '#bdc9c9',
+						'on-secondary': '#ffffff',
+						'on-secondary-fixed-variant': '#5b4300',
+						'surface-tint': '#00696c',
+						tertiary: '#4f5f5f',
+						'inverse-surface': '#2f3133',
+						'inverse-on-surface': '#f0f0f3',
+						'primary-fixed-dim': '#79d5d8',
+						error: '#ba1a1a',
+						'surface-bright': '#f9f9fc',
+						'on-surface': '#1a1c1e',
+						'surface-container-high': '#e8e8ea',
+						'on-error-container': '#93000a'
+					},
+					borderRadius: {
+						DEFAULT: '0.25rem',
+						lg: '0.5rem',
+						xl: '0.75rem',
+						full: '9999px'
+					},
+					spacing: {
+						gutter: '24px',
+						'container-margin-mobile': '16px',
+						'container-margin-desktop': '40px',
+						'card-padding': '24px',
+						'section-gap': '48px',
+						base: '8px'
+					},
+					fontFamily: {
+						'display-lg': ['Manrope'],
+						'label-sm': ['Inter'],
+						'body-lg': ['Inter'],
+						'label-md': ['Inter'],
+						'headline-lg': ['Manrope'],
+						'headline-md': ['Manrope'],
+						'title-lg': ['Manrope'],
+						'body-md': ['Inter'],
+						'headline-lg-mobile': ['Manrope']
+					},
+					fontSize: {
+						'display-lg': ['48px', { lineHeight: '56px', letterSpacing: '-0.02em', fontWeight: '700' }],
+						'label-sm': ['12px', { lineHeight: '16px', letterSpacing: '0.04em', fontWeight: '600' }],
+						'body-lg': ['18px', { lineHeight: '28px', fontWeight: '400' }],
+						'label-md': ['14px', { lineHeight: '20px', letterSpacing: '0.01em', fontWeight: '500' }],
+						'headline-lg': ['32px', { lineHeight: '40px', fontWeight: '600' }],
+						'headline-md': ['24px', { lineHeight: '32px', fontWeight: '600' }],
+						'title-lg': ['20px', { lineHeight: '28px', fontWeight: '600' }],
+						'body-md': ['16px', { lineHeight: '24px', fontWeight: '400' }],
+						'headline-lg-mobile': ['24px', { lineHeight: '32px', fontWeight: '600' }]
+					}
+				}
+			}
+		};
+	</script>
+
+	<style>
+		.hero-gradient {
+			background: linear-gradient(rgba(0, 32, 33, 0.65), rgba(0, 32, 33, 0.85));
+		}
+
+		.glass-card {
+			background: rgba(255, 255, 255, 0.9);
+			backdrop-filter: blur(8px);
+		}
+	</style>
+</head>
+<body class="bg-background font-body-md text-on-background selection:bg-primary-fixed selection:text-on-primary-fixed">
+	<div id="app"></div>
+	<script type="module" src="./Pages/Public/home.js"></script>
+</body>
+</html>
 
