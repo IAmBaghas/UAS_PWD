@@ -28,10 +28,10 @@ export const footer = () => {
           <div>
             <h5 class="text-white font-bold mb-6">Info Terpadu</h5>
             <p class="text-label-md mb-4">Dapatkan info pendaftaran dan kegiatan kampus langsung di email Anda.</p>
-            <div class="relative">
-              <input class="w-full bg-surface-container-highest/10 border border-outline/30 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="Email Anda" type="email"/>
-              <button class="absolute right-2 top-2 bg-primary text-white p-1.5 rounded-md" aria-label="Send">
-                <span class="material-symbols-outlined text-[18px]">send</span>
+            <div class="flex w-full gap-2 mt-2">
+              <input class="w-full flex-1 bg-surface-container-highest/10 border border-outline/30 rounded-lg px-4 py-3 text-white focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="Email Anda" type="email"/>
+              <button class="bg-primary text-white px-4 py-3 rounded-lg flex items-center justify-center hover:opacity-90 transition-opacity" aria-label="Send">
+                <span class="material-symbols-outlined text-[20px]">send</span>
               </button>
             </div>
           </div>

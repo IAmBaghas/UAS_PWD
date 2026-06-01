@@ -6,7 +6,6 @@ import { whyChooseSection } from '../Organisms/WhyChooseSection.js';
 import { newsSection } from '../Organisms/NewsSection.js';
 import { ctaSection } from '../Organisms/CtaSection.js';
 import { footer } from '../Organisms/Footer.js';
-import { mobileBottomNav } from '../Organisms/MobileBottomNav.js';
 
 export const homeTemplate = () => {
   return `
@@ -20,6 +19,5 @@ export const homeTemplate = () => {
       ${ctaSection()}
     </main>
     ${footer()}
-    ${mobileBottomNav()}
   `;
 };
