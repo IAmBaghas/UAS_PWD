@@ -56,7 +56,7 @@ export const programsSection = () => {
   return `
     <section id="akademik" class="py-section-gap max-w-[1440px] mx-auto px-container-margin-mobile md:px-container-margin-desktop scroll-mt-28">
       ${sectionHeader({ eyebrow: 'Akademik', title: 'Program Unggulan', actionLabel: 'Lihat Semua Jurusan' })}
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-gutter">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-gutter">
         ${programs.map(programCard).join('')}
       </div>
     </section>
