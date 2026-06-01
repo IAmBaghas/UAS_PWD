@@ -26,7 +26,7 @@ if (app) {
 
     // Fallback to the first section if at the very top or no section found
     if (window.scrollY < 50 && links.length > 0) {
-        currentSectionId = links[0].getAttribute('data-target');
+      currentSectionId = links[0].getAttribute('data-target');
     }
 
     links.forEach(link => {
@@ -70,6 +70,47 @@ if (app) {
       link.addEventListener('click', () => {
         mobileMenu.classList.add('hidden');
         mobileMenu.classList.remove('flex');
+      });
+    });
+  }
+
+  // Carousel Logic
+  const carousel = document.getElementById('programs-carousel');
+  const indicators = document.querySelectorAll('#carousel-indicators button');
+  if (carousel && indicators.length) {
+    const updateIndicators = () => {
+      const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+      if (maxScroll <= 0) return;
+
+      const scrollPercentage = carousel.scrollLeft / maxScroll;
+      let activeIndex = Math.round(scrollPercentage * (indicators.length - 1));
+
+      if (activeIndex < 0) activeIndex = 0;
+      if (activeIndex >= indicators.length) activeIndex = indicators.length - 1;
+
+      indicators.forEach((indicator, index) => {
+        if (index === activeIndex) {
+          indicator.className = 'transition-all rounded-full bg-primary w-6 h-2.5';
+        } else {
+          indicator.className = 'transition-all rounded-full bg-outline-variant w-2.5 h-2.5';
+        }
+      });
+    };
+
+    carousel.addEventListener('scroll', updateIndicators);
+    // Initial call in case of resizing or pre-scrolled
+    setTimeout(updateIndicators, 100);
+
+    // Make dots clickable
+    indicators.forEach((indicator, index) => {
+      indicator.addEventListener('click', () => {
+        const cards = carousel.querySelectorAll('.program-card');
+        if (cards[index]) {
+          carousel.scrollTo({
+            left: cards[index].offsetLeft - carousel.offsetLeft,
+            behavior: 'smooth'
+          });
+        }
       });
     });
   }

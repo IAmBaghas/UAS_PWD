@@ -1,6 +1,6 @@
 export const programCard = ({ iconName, category, title, description, imageSrc, imageAlt }) => {
   return `
-    <div class="group bg-surface-container-lowest border border-outline-variant rounded-xl p-card-padding hover:border-primary transition-all hover:shadow-2xl shrink-0 snap-center min-w-[280px] sm:min-w-[350px] max-w-[350px]">
+    <div class="program-card group bg-surface-container-lowest border border-outline-variant rounded-xl p-card-padding hover:border-primary transition-all hover:shadow-2xl shrink-0 snap-center min-w-[280px] sm:min-w-[350px] max-w-[350px]">
       <div class="overflow-hidden rounded-lg mb-6 bg-surface-container-low flex items-center justify-center aspect-[4/3]">
         <img class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" src="${imageSrc}" alt="${imageAlt || title}"/>
       </div>

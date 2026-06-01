@@ -64,8 +64,11 @@ export const programsSection = () => {
   return `
     <section id="akademik" class="py-section-gap max-w-[1440px] mx-auto px-container-margin-mobile md:px-container-margin-desktop scroll-mt-28">
       ${sectionHeader({ eyebrow: 'Akademik', title: 'Program Unggulan', actionLabel: 'Lihat Semua Jurusan' })}
-      <div class="flex gap-gutter overflow-x-auto snap-x snap-mandatory pb-8" style="scrollbar-width: none;">
+      <div id="programs-carousel" class="flex gap-gutter overflow-x-auto snap-x snap-mandatory pb-8" style="scrollbar-width: none;">
         ${programs.map(programCard).join('')}
+      </div>
+      <div id="carousel-indicators" class="flex justify-center gap-2 mt-2">
+        ${programs.map((_, i) => `<button aria-label="Go to slide ${i + 1}" class="transition-all rounded-full ${i === 0 ? 'bg-primary w-6 h-2.5' : 'bg-outline-variant w-2.5 h-2.5'}"></button>`).join('')}
       </div>
     </section>
   `;
