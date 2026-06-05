@@ -37,7 +37,7 @@ export const footer = () => {
           </div>
         </div>
         <div class="pt-8 border-t border-outline/20 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p class="text-label-sm">© 2025 Politeknik Negeri Jakarta. All Rights Reserved.</p>
+          <p class="text-label-sm">© 2026 Politeknik Negeri Jakarta. All Rights Reserved.</p>
           <div class="flex gap-6 text-label-sm">
             <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> BAN-PT ACCREDITED</span>
             <span class="opacity-50">|</span>

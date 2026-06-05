@@ -7,7 +7,7 @@ export const ctaSection = () => {
         <h2 class="font-display-lg text-headline-lg md:text-display-lg text-white mb-6">Siap Memulai Perjalanan Profesional Anda?</h2>
         <p class="text-body-lg text-primary-fixed mb-10 opacity-80">Bergabunglah dengan ribuan mahasiswa lainnya dan jadilah ahli di bidang Anda. Pendaftaran mahasiswa baru tahun akademik 2026 telah dibuka.</p>
         <div class="flex flex-col sm:flex-row justify-center gap-4">
-          ${button({ label: 'Hubungi Kami', variant: 'primary', iconName: 'chat', className: 'rounded-full' })}
+          ${button({ label: 'Hubungi Kami', href: './contact.html', variant: 'primary', iconName: 'chat', className: 'rounded-full' })}
           ${button({ label: 'Konsultasi Program', variant: 'outlineLight', iconName: 'support_agent', className: 'rounded-full' })}
         </div>
       </div>

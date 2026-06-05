@@ -2,13 +2,14 @@ import { button } from '../Atoms/Button.js';
 import { navLinks } from '../Molecules/NavLinks.js';
 
 export const header = ({ linkPrefix = '', activePage = 'home' } = {}) => {
+  const contactHref = './contact.html';
   const links = [
     { label: 'Profil', href: `${linkPrefix}#profil` },
     { label: 'Akademik', href: `${linkPrefix}#akademik` },
     { label: 'Pendaftaran', href: `${linkPrefix}#pendaftaran` },
     { label: 'Kemahasiswaan', href: `${linkPrefix}#kemahasiswaan` },
     { label: 'Kerjasama', href: `${linkPrefix}#kerjasama` },
-    { label: 'Berita', href: activePage === 'articles' ? './articles.html' : '#berita' }
+    { label: 'Berita', href: activePage === 'articles' ? './articles.html' : `${linkPrefix}#berita` }
   ];
 
   return `
@@ -23,7 +24,7 @@ export const header = ({ linkPrefix = '', activePage = 'home' } = {}) => {
         </a>
         <nav class="hidden md:flex items-center gap-6">${navLinks(links)}</nav>
         <div class="flex items-center gap-4">
-          ${button({ label: 'Hubungi Kami', href: `${linkPrefix}#kontak`, variant: 'primary', className: 'hidden md:inline-flex px-6 py-2 rounded-full' })}
+          ${button({ label: 'Hubungi Kami', href: contactHref, variant: 'primary', className: 'hidden md:inline-flex px-6 py-2 rounded-full' })}
           <button id="hamburger-btn" class="md:hidden text-primary p-2" aria-label="Open menu">
             <span class="material-symbols-outlined">menu</span>
           </button>
@@ -33,7 +34,7 @@ export const header = ({ linkPrefix = '', activePage = 'home' } = {}) => {
       <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-surface/95 backdrop-blur-md border-b border-outline-variant shadow-lg flex-col px-container-margin-mobile py-6 gap-6">
         <nav class="flex flex-col gap-6 items-center">${navLinks(links)}</nav>
         <div class="flex justify-center mt-2">
-          ${button({ label: 'Hubungi Kami', href: `${linkPrefix}#kontak`, variant: 'primary', className: 'px-8 py-3 rounded-full' })}
+          ${button({ label: 'Hubungi Kami', href: contactHref, variant: 'primary', className: 'px-8 py-3 rounded-full' })}
         </div>
       </div>
     </header>
