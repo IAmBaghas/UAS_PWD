@@ -36,6 +36,11 @@ const formatDate = (dateValue) => {
     }).format(date);
 };
 
+const formatViews = (views = 0) => {
+    const viewCount = Number(views) || 0;
+    return new Intl.NumberFormat('id-ID').format(viewCount);
+};
+
 const getImageUrl = (thumbnail) => {
     if (!thumbnail) return FALLBACK_IMAGE;
     if (thumbnail.startsWith('http://') || thumbnail.startsWith('https://')) return thumbnail;
@@ -192,9 +197,15 @@ const renderArticleCard = (article) => {
             onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';" />
         </div>
         <div class="p-card-padding">
-          <div class="flex flex-wrap items-center gap-2 mb-4">
-            <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-label-sm font-bold">${type}</span>
-            <span class="text-label-sm text-on-surface-variant">${formatDate(article.date)}</span>
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-label-sm font-bold">${type}</span>
+              <span class="text-label-sm text-on-surface-variant">${formatDate(article.date)}</span>
+            </div>
+            <span class="inline-flex shrink-0 items-center gap-1 text-label-sm text-on-surface-variant sm:justify-end">
+              <span class="material-symbols-outlined text-[16px]">visibility</span>
+              ${formatViews(article.views)} views
+            </span>
           </div>
           <h2 class="font-title-lg text-title-lg text-on-background mb-3 group-hover:text-primary transition-colors">${title}</h2>
           <p class="text-body-md text-on-surface-variant mb-5">${summary}</p>
@@ -296,14 +307,20 @@ const bindListEvents = () => {
 };
 
 const incrementArticleView = async (article) => {
-  if (!article?.id) return;
+  if (!article?.id) return article;
 
   try {
-    await fetch(`${ARTICLES_ENDPOINT}/view?id=${encodeURIComponent(article.id)}`, {
+    const response = await fetch(`${ARTICLES_ENDPOINT}/view?id=${encodeURIComponent(article.id)}`, {
       method: 'POST'
     });
+    const payload = await response.json();
+
+    if (!response.ok || payload.status !== 'success') return article;
+
+    return payload.data || article;
   } catch {
     // View counter is secondary; article detail should stay readable.
+    return article;
   }
 };
 
@@ -329,9 +346,9 @@ const renderDetailPage = async (slug) => {
     return;
   }
 
-  await incrementArticleView(article);
-  setPageTitle(article.title || 'Detail Artikel');
-  const imageUrl = escapeHtml(getImageUrl(article.thumbnail));
+  const viewedArticle = await incrementArticleView(article);
+  setPageTitle(viewedArticle.title || 'Detail Artikel');
+  const imageUrl = escapeHtml(getImageUrl(viewedArticle.thumbnail));
 
   renderShell(`
     <main class="min-h-screen">
@@ -341,24 +358,30 @@ const renderDetailPage = async (slug) => {
             <span class="material-symbols-outlined text-[20px]">arrow_back</span>
             Semua artikel
           </a>
-          <div class="flex flex-wrap items-center gap-2 mb-5">
-            <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-label-sm font-bold">${escapeHtml(article.type || 'Artikel')}</span>
-            <span class="text-label-sm text-on-surface-variant">${formatDate(article.date)}</span>
-            <span class="text-label-sm text-on-surface-variant">Oleh ${escapeHtml(article.author || 'Admin')}</span>
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-label-sm font-bold">${escapeHtml(viewedArticle.type || 'Artikel')}</span>
+              <span class="text-label-sm text-on-surface-variant">${formatDate(viewedArticle.date)}</span>
+              <span class="text-label-sm text-on-surface-variant">Oleh ${escapeHtml(viewedArticle.author || 'Admin')}</span>
+            </div>
+            <span class="inline-flex shrink-0 items-center gap-1 text-label-sm text-on-surface-variant sm:justify-end">
+              <span class="material-symbols-outlined text-[16px]">visibility</span>
+              ${formatViews(viewedArticle.views)} views
+            </span>
           </div>
-          <h1 class="font-display-lg text-[34px] md:text-display-lg leading-tight mb-5">${escapeHtml(article.title || 'Artikel tanpa judul')}</h1>
-          <p class="text-body-lg text-on-surface-variant">${escapeHtml(article.summary || '')}</p>
+          <h1 class="font-display-lg text-[34px] md:text-display-lg leading-tight mb-5">${escapeHtml(viewedArticle.title || 'Artikel tanpa judul')}</h1>
+          <p class="text-body-lg text-on-surface-variant">${escapeHtml(viewedArticle.summary || '')}</p>
         </section>
         <section class="max-w-[1120px] mx-auto px-container-margin-mobile md:px-container-margin-desktop">
           <div class="bg-surface-container h-[280px] md:h-[440px] rounded-xl overflow-hidden border border-outline-variant">
             <img class="w-full h-full object-contain"
               src="${imageUrl}"
-              alt="${escapeHtml(article.title || 'Artikel')}"
+              alt="${escapeHtml(viewedArticle.title || 'Artikel')}"
               onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';" />
           </div>
         </section>
         <section class="max-w-[820px] mx-auto px-container-margin-mobile md:px-container-margin-desktop py-section-gap">
-          <div class="article-content">${sanitizeArticleContent(article.content || `<p>${escapeHtml(article.summary || 'Konten artikel belum tersedia.')}</p>`)}</div>
+          <div class="article-content">${sanitizeArticleContent(viewedArticle.content || `<p>${escapeHtml(viewedArticle.summary || 'Konten artikel belum tersedia.')}</p>`)}</div>
         </section>
       </article>
     </main>
