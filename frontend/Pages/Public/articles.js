@@ -3,136 +3,136 @@ import { footer } from '../../Components/Atomic/Organisms/Footer.js';
 
 const API_BASE_URL = 'http://localhost:3000';
 const ARTICLES_ENDPOINT = `${API_BASE_URL}/api/articles`;
-const FALLBACK_IMAGE = './assets/images/logo.png';
+const FALLBACK_IMAGE = `${API_BASE_URL}/uploads/noimage.jpg`;
 
 const app = document.getElementById('app');
 const state = {
-  articles: [],
-  keyword: '',
-  type: 'all',
-  isLoading: true,
-  error: ''
+    articles: [],
+    keyword: '',
+    type: 'all',
+    isLoading: true,
+    error: ''
 };
 let searchRenderTimer;
 
 const escapeHtml = (value = '') => String(value)
-  .replace(/&/g, '&amp;')
-  .replace(/</g, '&lt;')
-  .replace(/>/g, '&gt;')
-  .replace(/"/g, '&quot;')
-  .replace(/'/g, '&#039;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 
 const formatDate = (dateValue) => {
-  if (!dateValue) return 'Tanggal belum tersedia';
+    if (!dateValue) return 'Tanggal belum tersedia';
 
-  const date = new Date(dateValue);
-  if (Number.isNaN(date.getTime())) return dateValue;
+    const date = new Date(dateValue);
+    if (Number.isNaN(date.getTime())) return dateValue;
 
-  return new Intl.DateTimeFormat('id-ID', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric'
-  }).format(date);
+    return new Intl.DateTimeFormat('id-ID', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+    }).format(date);
 };
 
 const getImageUrl = (thumbnail) => {
-  if (!thumbnail) return FALLBACK_IMAGE;
-  if (thumbnail.startsWith('http://') || thumbnail.startsWith('https://')) return thumbnail;
-  if (thumbnail.startsWith('/')) return `${API_BASE_URL}${thumbnail}`;
-  return `${API_BASE_URL}/${thumbnail}`;
+    if (!thumbnail) return FALLBACK_IMAGE;
+    if (thumbnail.startsWith('http://') || thumbnail.startsWith('https://')) return thumbnail;
+    if (thumbnail.startsWith('/')) return `${API_BASE_URL}${thumbnail}`;
+    return `${API_BASE_URL}/${thumbnail}`;
 };
 
 const sanitizeArticleContent = (html = '') => {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(String(html), 'text/html');
-  const allowedTags = new Set(['H2', 'H3', 'P', 'STRONG', 'EM', 'UL', 'OL', 'LI', 'BR', 'A']);
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(String(html), 'text/html');
+    const allowedTags = new Set(['H2', 'H3', 'P', 'STRONG', 'EM', 'UL', 'OL', 'LI', 'BR', 'A']);
 
-  const walk = (node) => {
-    [...node.children].forEach((child) => {
-      if (!allowedTags.has(child.tagName)) {
-        const text = document.createTextNode(child.textContent || '');
-        child.replaceWith(text);
-        return;
-      }
+    const walk = (node) => {
+        [...node.children].forEach((child) => {
+            if (!allowedTags.has(child.tagName)) {
+                const text = document.createTextNode(child.textContent || '');
+                child.replaceWith(text);
+                return;
+            }
 
-      [...child.attributes].forEach((attribute) => child.removeAttribute(attribute.name));
-      if (child.tagName === 'A') {
-        child.setAttribute('target', '_blank');
-        child.setAttribute('rel', 'noopener noreferrer');
-      }
-      walk(child);
-    });
-  };
+            [...child.attributes].forEach((attribute) => child.removeAttribute(attribute.name));
+            if (child.tagName === 'A') {
+                child.setAttribute('target', '_blank');
+                child.setAttribute('rel', 'noopener noreferrer');
+            }
+            walk(child);
+        });
+    };
 
-  walk(doc.body);
-  return doc.body.innerHTML;
+    walk(doc.body);
+    return doc.body.innerHTML;
 };
 
 const sortArticles = (articles) => [...articles].sort((a, b) => {
-  const timeA = new Date(a.date || a.createdAt || 0).getTime();
-  const timeB = new Date(b.date || b.createdAt || 0).getTime();
-  return timeB - timeA;
+    const timeA = new Date(a.date || a.createdAt || 0).getTime();
+    const timeB = new Date(b.date || b.createdAt || 0).getTime();
+    return timeB - timeA;
 });
 
 const getPublishedArticles = () => {
-  return sortArticles(state.articles).filter((article) => {
-    const status = String(article.status || '').toLowerCase();
-    return !status || status === 'published';
-  });
+    return sortArticles(state.articles).filter((article) => {
+        const status = String(article.status || '').toLowerCase();
+        return !status || status === 'published';
+    });
 };
 
 const getFilteredArticles = () => {
-  const keyword = state.keyword.trim().toLowerCase();
+    const keyword = state.keyword.trim().toLowerCase();
 
-  return getPublishedArticles().filter((article) => {
-    const matchesType = state.type === 'all' || article.type === state.type;
-    const searchable = [
-      article.title,
-      article.summary,
-      article.author,
-      article.type
-    ].join(' ').toLowerCase();
+    return getPublishedArticles().filter((article) => {
+        const matchesType = state.type === 'all' || article.type === state.type;
+        const searchable = [
+            article.title,
+            article.summary,
+            article.author,
+            article.type
+        ].join(' ').toLowerCase();
 
-    return matchesType && (!keyword || searchable.includes(keyword));
-  });
+        return matchesType && (!keyword || searchable.includes(keyword));
+    });
 };
 
 const getArticleSlug = () => new URLSearchParams(window.location.search).get('slug');
 
 const setPageTitle = (title = 'Artikel') => {
-  document.title = `${title} | Politeknik Negeri Jakarta`;
+    document.title = `${title} | Politeknik Negeri Jakarta`;
 };
 
 const renderShell = (content) => {
-  app.innerHTML = `
+    app.innerHTML = `
     ${header({ linkPrefix: './index.html', activePage: 'articles' })}
     ${content}
     ${footer()}
   `;
-  bindMobileMenu();
+    bindMobileMenu();
 };
 
 const bindMobileMenu = () => {
-  const hamburgerBtn = document.getElementById('hamburger-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-  if (!hamburgerBtn || !mobileMenu) return;
+    if (!hamburgerBtn || !mobileMenu) return;
 
-  hamburgerBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-    mobileMenu.classList.toggle('flex');
-  });
-
-  mobileMenu.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      mobileMenu.classList.add('hidden');
-      mobileMenu.classList.remove('flex');
+    hamburgerBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        mobileMenu.classList.toggle('flex');
     });
-  });
+
+    mobileMenu.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('flex');
+        });
+    });
 };
 
 const renderLoading = () => {
-  renderShell(`
+    renderShell(`
     <main class="min-h-screen">
       <section class="max-w-[1440px] mx-auto px-container-margin-mobile md:px-container-margin-desktop py-section-gap">
         <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-card-padding">
@@ -144,7 +144,7 @@ const renderLoading = () => {
 };
 
 const renderError = () => {
-  renderShell(`
+    renderShell(`
     <main class="min-h-screen">
       <section class="max-w-[1440px] mx-auto px-container-margin-mobile md:px-container-margin-desktop py-section-gap">
         <a href="./index.html#berita" class="inline-flex items-center gap-2 text-primary font-label-md mb-8">
@@ -162,20 +162,20 @@ const renderError = () => {
 };
 
 const renderArticleCard = (article) => {
-  const title = escapeHtml(article.title || 'Artikel tanpa judul');
-  const summary = escapeHtml(article.summary || 'Ringkasan artikel belum tersedia.');
-  const type = escapeHtml(article.type || 'Artikel');
-  const slug = encodeURIComponent(article.slug || article.id || '');
-  const imageUrl = escapeHtml(getImageUrl(article.thumbnail));
+    const title = escapeHtml(article.title || 'Artikel tanpa judul');
+    const summary = escapeHtml(article.summary || 'Ringkasan artikel belum tersedia.');
+    const type = escapeHtml(article.type || 'Artikel');
+    const slug = encodeURIComponent(article.slug || article.id || '');
+    const imageUrl = escapeHtml(getImageUrl(article.thumbnail));
 
-  return `
+    return `
     <article class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group">
       <a href="./articles.html?slug=${slug}" class="block h-full">
-        <div class="h-56 bg-surface-container overflow-hidden">
-          <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        <div class="h-56 bg-surface-container-low overflow-hidden flex items-center justify-center">
+          <img class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
             src="${imageUrl}"
             alt="${title}"
-            onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';this.classList.add('object-contain','p-8');" />
+            onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';" />
         </div>
         <div class="p-card-padding">
           <div class="flex flex-wrap items-center gap-2 mb-4">
@@ -195,18 +195,18 @@ const renderArticleCard = (article) => {
 };
 
 const renderListPage = () => {
-  setPageTitle('Artikel');
-  const articles = getFilteredArticles();
-  const types = ['all', ...new Set(getPublishedArticles().map((article) => article.type).filter(Boolean))];
+        setPageTitle('Artikel');
+        const articles = getFilteredArticles();
+        const types = ['all', ...new Set(getPublishedArticles().map((article) => article.type).filter(Boolean))];
 
-  renderShell(`
+        renderShell(`
     <main class="min-h-screen">
       <section class="bg-surface-container-low py-14 border-b border-outline-variant">
         <div class="max-w-[1440px] mx-auto px-container-margin-mobile md:px-container-margin-desktop">
           <p class="text-label-sm font-bold text-primary uppercase mb-3">Pusat Informasi</p>
           <div class="max-w-3xl">
             <h1 class="font-display-lg text-[36px] md:text-display-lg leading-tight mb-4">Artikel Kampus PNJ</h1>
-            <p class="text-body-lg text-on-surface-variant">Berita, prestasi, dan informasi akademik terbaru yang diambil langsung dari backend artikel.</p>
+            <p class="text-body-lg text-on-surface-variant">Berita, prestasi, dan informasi akademik terbaru.</p>
           </div>
         </div>
       </section>
@@ -320,10 +320,10 @@ const renderDetailPage = async (slug) => {
         </section>
         <section class="max-w-[1120px] mx-auto px-container-margin-mobile md:px-container-margin-desktop">
           <div class="bg-surface-container h-[280px] md:h-[440px] rounded-xl overflow-hidden border border-outline-variant">
-            <img class="w-full h-full object-cover"
+            <img class="w-full h-full object-contain"
               src="${imageUrl}"
               alt="${escapeHtml(article.title || 'Artikel')}"
-              onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';this.classList.add('object-contain','p-12');" />
+              onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';" />
           </div>
         </section>
         <section class="max-w-[820px] mx-auto px-container-margin-mobile md:px-container-margin-desktop py-section-gap">

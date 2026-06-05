@@ -98,6 +98,10 @@
         };
     </script>
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
         .article-content h2 {
             color: #1a1c1e;
             font-family: Manrope, sans-serif;
@@ -117,6 +121,12 @@
         .article-content strong {
             color: #002021;
             font-weight: 700;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
         }
     </style>
 </head>

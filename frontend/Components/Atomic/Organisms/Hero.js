@@ -16,8 +16,8 @@ export const hero = () => {
           <h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg mb-6 leading-[1.1]">Membangun Masa Depan <br/>Melalui Keahlian Terapan</h1>
           <p class="text-body-lg text-surface-variant mb-8 opacity-90 max-w-lg">Persiapkan karir profesional Anda bersama Politeknik Negeri Jakarta. Pendidikan vokasi berkualitas dengan fasilitas standar industri dan kurikulum masa depan.</p>
           <div class="flex flex-wrap gap-4">
-            ${button({ label: 'Daftar Sekarang', variant: 'primary', iconName: 'arrow_forward' })}
-            ${button({ label: 'Lihat Program Studi', variant: 'ghost' })}
+            ${button({ label: 'Daftar Sekarang', href: '#pendaftaran', variant: 'primary', iconName: 'arrow_forward' })}
+            ${button({ label: 'Lihat Program Studi', href: '#akademik', variant: 'ghost' })}
           </div>
         </div>
       </div>

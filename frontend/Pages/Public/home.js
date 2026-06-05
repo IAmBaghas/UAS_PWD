@@ -3,7 +3,8 @@ import { newsCard } from '../../Components/Atomic/Molecules/NewsCard.js';
 
 const API_BASE_URL = 'http://localhost:3000';
 const ARTICLES_ENDPOINT = `${API_BASE_URL}/api/articles`;
-const FALLBACK_IMAGE = './assets/images/logo.png';
+const FALLBACK_IMAGE = `${API_BASE_URL}/uploads/noimage.jpg`;
+const HEADER_OFFSET = 96;
 
 const app = document.getElementById('app');
 
@@ -78,9 +79,50 @@ const loadLatestNews = async () => {
   }
 };
 
+const scrollToSection = (targetId, shouldUpdateHistory = true) => {
+  const target = document.getElementById(targetId);
+  if (!target) return false;
+
+  const targetPosition = target.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+  window.scrollTo({
+    top: Math.max(targetPosition, 0),
+    behavior: 'smooth'
+  });
+
+  if (shouldUpdateHistory) {
+    history.pushState(null, '', `#${targetId}`);
+  }
+
+  return true;
+};
+
+const bindSmoothAnchorScroll = () => {
+  document.querySelectorAll('a[href^="#"]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const targetId = link.getAttribute('href')?.replace('#', '');
+      if (!targetId) return;
+
+      if (scrollToSection(targetId)) {
+        event.preventDefault();
+      }
+    });
+  });
+};
+
+const scrollToInitialHash = () => {
+  const targetId = window.location.hash.replace('#', '');
+  if (!targetId) return;
+
+  requestAnimationFrame(() => {
+    scrollToSection(targetId, false);
+  });
+};
+
 if (app) {
   app.innerHTML = homeTemplate();
   loadLatestNews();
+  bindSmoothAnchorScroll();
+  scrollToInitialHash();
 
   const updateScrollSpy = () => {
     const links = document.querySelectorAll('.nav-link');

@@ -8,8 +8,8 @@ const escapeHtml = (value = '') => String(value)
 export const newsCard = ({ image, tagClass, tagLabel, date, title, description, href = '#' }) => {
   const content = `
     <article class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden group">
-      <div class="h-48 overflow-hidden">
-        <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="${escapeHtml(image)}" alt="${escapeHtml(title)}"/>
+      <div class="h-48 overflow-hidden bg-surface-container-low flex items-center justify-center">
+        <img class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" src="${escapeHtml(image)}" alt="${escapeHtml(title)}"/>
       </div>
       <div class="p-card-padding">
         <div class="flex gap-2 mb-4">
