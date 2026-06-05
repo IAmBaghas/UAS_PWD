@@ -1,9 +1,86 @@
 import { homeTemplate } from '../../Components/Atomic/Templates/HomeTemplate.js';
+import { newsCard } from '../../Components/Atomic/Molecules/NewsCard.js';
+
+const API_BASE_URL = 'http://localhost:3000';
+const ARTICLES_ENDPOINT = `${API_BASE_URL}/api/articles`;
+const FALLBACK_IMAGE = './assets/images/logo.png';
 
 const app = document.getElementById('app');
 
+const formatDate = (dateValue) => {
+  if (!dateValue) return 'Tanggal belum tersedia';
+
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return dateValue;
+
+  return new Intl.DateTimeFormat('id-ID', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric'
+  }).format(date);
+};
+
+const getImageUrl = (thumbnail) => {
+  if (!thumbnail) return FALLBACK_IMAGE;
+  if (thumbnail.startsWith('http://') || thumbnail.startsWith('https://')) return thumbnail;
+  if (thumbnail.startsWith('/')) return `${API_BASE_URL}${thumbnail}`;
+  return `${API_BASE_URL}/${thumbnail}`;
+};
+
+const getPublishedArticles = (articles) => {
+  return [...articles]
+    .filter((article) => String(article.status || '').toLowerCase() === 'published')
+    .sort((a, b) => {
+      const timeA = new Date(a.date || a.createdAt || 0).getTime();
+      const timeB = new Date(b.date || b.createdAt || 0).getTime();
+      return timeB - timeA;
+    });
+};
+
+const loadLatestNews = async () => {
+  const newsGrid = document.getElementById('news-grid');
+  if (!newsGrid) return;
+
+  try {
+    const response = await fetch(ARTICLES_ENDPOINT);
+    const payload = await response.json();
+
+    if (!response.ok || payload.status !== 'success') {
+      throw new Error(payload.message || 'Gagal mengambil data artikel.');
+    }
+
+    const articles = getPublishedArticles(Array.isArray(payload.data) ? payload.data : []).slice(0, 3);
+
+    if (!articles.length) {
+      newsGrid.innerHTML = `
+        <div class="md:col-span-3 bg-surface-container-lowest border border-outline-variant rounded-xl p-card-padding text-on-surface-variant">
+          Belum ada artikel yang dipublikasikan.
+        </div>
+      `;
+      return;
+    }
+
+    newsGrid.innerHTML = articles.map((article) => newsCard({
+      image: getImageUrl(article.thumbnail),
+      tagClass: 'bg-primary/10 text-primary',
+      tagLabel: article.type || 'Artikel',
+      date: formatDate(article.date),
+      title: article.title || 'Artikel tanpa judul',
+      description: article.summary || 'Ringkasan artikel belum tersedia.',
+      href: `./articles.html?slug=${encodeURIComponent(article.slug || article.id || '')}`
+    })).join('');
+  } catch (error) {
+    newsGrid.innerHTML = `
+      <div class="md:col-span-3 bg-surface-container-lowest border border-outline-variant rounded-xl p-card-padding text-on-surface-variant">
+        Artikel belum bisa dimuat. Jalankan backend di http://localhost:3000.
+      </div>
+    `;
+  }
+};
+
 if (app) {
   app.innerHTML = homeTemplate();
+  loadLatestNews();
 
   const updateScrollSpy = () => {
     const links = document.querySelectorAll('.nav-link');
