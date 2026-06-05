@@ -166,7 +166,7 @@ const validateForm = (form) => {
   if (!data.identity) errors.identity = 'Status pengirim wajib dipilih.';
   if (!data.subject?.trim()) errors.subject = 'Subjek wajib diisi.';
   if (!data.message?.trim()) errors.message = 'Pesan wajib diisi.';
-  else if (data.message.trim().length < 20) errors.message = 'Pesan minimal 20 karakter.';
+  else if (data.message.trim().length < 10) errors.message = 'Pesan minimal 10 karakter.';
 
   ['fullName', 'email', 'phone', 'service', 'identity', 'subject', 'message'].forEach((field) => {
     setFieldError(field, errors[field] || '');
@@ -188,17 +188,15 @@ const bindContactForm = () => {
       return;
     }
 
-    const ticketNumber = `PNJ-${Date.now().toString().slice(-6)}`;
     const submissions = JSON.parse(localStorage.getItem('pnjContactSubmissions') || '[]');
     submissions.push({
       ...data,
-      ticketNumber,
       submittedAt: new Date().toISOString()
     });
     localStorage.setItem('pnjContactSubmissions', JSON.stringify(submissions));
 
     form.reset();
-    showAlert('success', `Pesan berhasil dicatat dengan nomor referensi ${escapeHtml(ticketNumber)}.`);
+    showAlert('success', 'Pesan berhasil dikirim.');
   });
 };
 
