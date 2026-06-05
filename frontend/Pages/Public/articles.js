@@ -10,6 +10,7 @@ const state = {
     articles: [],
     keyword: '',
     type: 'all',
+    sort: 'newest',
     isLoading: true,
     error: ''
 };
@@ -68,14 +69,25 @@ const sanitizeArticleContent = (html = '') => {
     return doc.body.innerHTML;
 };
 
+const getCreatedTime = (article) => {
+    const createdTime = new Date(article.createdAt || 0).getTime();
+    return Number.isNaN(createdTime) ? 0 : createdTime;
+};
+
 const sortArticles = (articles) => [...articles].sort((a, b) => {
-    const timeA = new Date(a.date || a.createdAt || 0).getTime();
-    const timeB = new Date(b.date || b.createdAt || 0).getTime();
-    return timeB - timeA;
+    if (state.sort === 'oldest') {
+        return getCreatedTime(a) - getCreatedTime(b);
+    }
+
+    if (state.sort === 'most-viewed') {
+        return (Number(b.views) || 0) - (Number(a.views) || 0);
+    }
+
+    return getCreatedTime(b) - getCreatedTime(a);
 });
 
 const getPublishedArticles = () => {
-    return sortArticles(state.articles).filter((article) => {
+    return state.articles.filter((article) => {
         const status = String(article.status || '').toLowerCase();
         return !status || status === 'published';
     });
@@ -84,7 +96,7 @@ const getPublishedArticles = () => {
 const getFilteredArticles = () => {
     const keyword = state.keyword.trim().toLowerCase();
 
-    return getPublishedArticles().filter((article) => {
+    const filteredArticles = getPublishedArticles().filter((article) => {
         const matchesType = state.type === 'all' || article.type === state.type;
         const searchable = [
             article.title,
@@ -95,6 +107,8 @@ const getFilteredArticles = () => {
 
         return matchesType && (!keyword || searchable.includes(keyword));
     });
+
+    return sortArticles(filteredArticles);
 };
 
 const getArticleSlug = () => new URLSearchParams(window.location.search).get('slug');
@@ -219,13 +233,24 @@ const renderListPage = () => {
               class="w-full rounded-lg border-outline-variant bg-surface-container-lowest pl-12 pr-4 py-3 focus:border-primary focus:ring-primary"
               placeholder="Cari artikel" />
           </div>
-          <div id="article-type-filter" class="flex gap-2 overflow-x-auto pb-1">
-            ${types.map((type) => `
-              <button class="article-filter whitespace-nowrap rounded-full px-4 py-2 text-label-md border transition-colors ${state.type === type ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-lowest text-on-surface-variant border-outline-variant hover:border-primary'}"
-                data-type="${escapeHtml(type)}">
-                ${type === 'all' ? 'Semua' : escapeHtml(type)}
-              </button>
-            `).join('')}
+          <div class="flex w-full flex-col gap-3 lg:w-auto lg:flex-row lg:items-center">
+            <label class="relative block w-full lg:w-56">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">sort</span>
+              <select id="article-sort"
+                class="w-full rounded-lg border-outline-variant bg-surface-container-lowest pl-12 pr-10 py-3 text-label-md focus:border-primary focus:ring-primary">
+                <option value="newest" ${state.sort === 'newest' ? 'selected' : ''}>Terbaru</option>
+                <option value="oldest" ${state.sort === 'oldest' ? 'selected' : ''}>Terlama</option>
+                <option value="most-viewed" ${state.sort === 'most-viewed' ? 'selected' : ''}>Paling banyak dilihat</option>
+              </select>
+            </label>
+            <div id="article-type-filter" class="flex gap-2 overflow-x-auto pb-1 lg:max-w-[560px]">
+              ${types.map((type) => `
+                <button class="article-filter whitespace-nowrap rounded-full px-4 py-2 text-label-md border transition-colors ${state.type === type ? 'bg-primary text-on-primary border-primary' : 'bg-surface-container-lowest text-on-surface-variant border-outline-variant hover:border-primary'}"
+                  data-type="${escapeHtml(type)}">
+                  ${type === 'all' ? 'Semua' : escapeHtml(type)}
+                </button>
+              `).join('')}
+            </div>
           </div>
         </div>
 
@@ -242,6 +267,7 @@ const renderListPage = () => {
 
 const bindListEvents = () => {
   const searchInput = document.getElementById('article-search');
+  const sortSelect = document.getElementById('article-sort');
   const filterButtons = document.querySelectorAll('.article-filter');
 
   searchInput?.addEventListener('input', (event) => {
@@ -261,6 +287,11 @@ const bindListEvents = () => {
       state.type = button.dataset.type || 'all';
       renderListPage();
     });
+  });
+
+  sortSelect?.addEventListener('change', (event) => {
+    state.sort = event.target.value || 'newest';
+    renderListPage();
   });
 };
 
