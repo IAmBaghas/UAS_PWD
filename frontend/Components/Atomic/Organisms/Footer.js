@@ -1,21 +1,21 @@
 import { footerColumn } from '../Molecules/FooterColumn.js';
 
 export const footer = () => {
-  const institutionLinks = [
-    { label: 'Tentang PNJ', href: '#' },
-    { label: 'Visi & Misi', href: '#' },
-    { label: 'Struktur Organisasi', href: '#' },
-    { label: 'Layanan Publik', href: '#' }
-  ];
+    const institutionLinks = [
+        { label: 'Tentang PNJ', href: '#' },
+        { label: 'Visi & Misi', href: '#' },
+        { label: 'Struktur Organisasi', href: '#' },
+        { label: 'Layanan Publik', href: '#' }
+    ];
 
-  const resourceLinks = [
-    { label: 'Privacy Policy', href: '#' },
-    { label: 'Terms of Service', href: '#' },
-    { label: 'Campus Map', href: '#' },
-    { label: 'Contact Support', href: '#' }
-  ];
+    const resourceLinks = [
+        { label: 'Privacy Policy', href: '#' },
+        { label: 'Terms of Service', href: '#' },
+        { label: 'Campus Map', href: '#' },
+        { label: 'Contact Support', href: '#' }
+    ];
 
-  return `
+    return `
     <footer id="kontak" class="bg-on-background text-outline-variant py-20 pb-28 md:pb-20 scroll-mt-28">
       <div class="max-w-[1440px] mx-auto px-container-margin-mobile md:px-container-margin-desktop">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
@@ -37,7 +37,7 @@ export const footer = () => {
           </div>
         </div>
         <div class="pt-8 border-t border-outline/20 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p class="text-label-sm">© 2024 Politeknik Negeri Jakarta. All Rights Reserved.</p>
+          <p class="text-label-sm">© 2025 Politeknik Negeri Jakarta. All Rights Reserved.</p>
           <div class="flex gap-6 text-label-sm">
             <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> BAN-PT ACCREDITED</span>
             <span class="opacity-50">|</span>
