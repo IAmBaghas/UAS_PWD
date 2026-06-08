@@ -74,6 +74,40 @@ export const handleRequest = async (req, res) => {
       }
     }
 
+    // Serve static frontend files
+    if (method === 'GET' && !pathname.startsWith('/api/')) {
+      let relativePath = pathname;
+      if (relativePath === '/' || relativePath === '') {
+        relativePath = '/index.html';
+      }
+      if (relativePath.startsWith('/frontend/')) {
+        relativePath = relativePath.replace('/frontend/', '/');
+      }
+
+      const filePath = path.join(__dirname, '..', 'frontend', decodeURIComponent(relativePath));
+
+      try {
+        const fileContent = await fs.readFile(filePath);
+
+        let ext = path.extname(filePath).toLowerCase();
+        let contentType = 'application/octet-stream';
+        if (ext === '.html') contentType = 'text/html';
+        else if (ext === '.js') contentType = 'application/javascript';
+        else if (ext === '.css') contentType = 'text/css';
+        else if (ext === '.jpg' || ext === '.jpeg') contentType = 'image/jpeg';
+        else if (ext === '.png') contentType = 'image/png';
+        else if (ext === '.gif') contentType = 'image/gif';
+        else if (ext === '.svg') contentType = 'image/svg+xml';
+        else if (ext === '.ico') contentType = 'image/x-icon';
+
+        res.writeHead(200, { 'Content-Type': contentType });
+        res.end(fileContent);
+        return;
+      } catch {
+        // Fall through to 404 if file not found
+      }
+    }
+
     // Health check endpoint
     if (pathname === '/api/health' && method === 'GET') {
       return jsonResponse(res, 200, {
