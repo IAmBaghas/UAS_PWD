@@ -6,10 +6,10 @@ export const header = ({ linkPrefix = '', activePage = 'home' } = {}) => {
   const links = [
     { label: 'Profil', href: `${linkPrefix}#profil` },
     { label: 'Akademik', href: `${linkPrefix}#akademik` },
-    { label: 'Pendaftaran', href: `${linkPrefix}#pendaftaran` },
     { label: 'Kemahasiswaan', href: `${linkPrefix}#kemahasiswaan` },
     { label: 'Kerjasama', href: `${linkPrefix}#kerjasama` },
-    { label: 'Berita', href: activePage === 'articles' ? './articles.html' : `${linkPrefix}#berita` }
+    { label: 'Berita', href: activePage === 'articles' ? './articles.html' : `${linkPrefix}#berita` },
+    { label: 'Pendaftaran', href: `${linkPrefix}#pendaftaran` },
   ];
 
   return `
