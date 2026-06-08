@@ -10,7 +10,7 @@ const state = {
     articles: [],
     keyword: '',
     type: 'all',
-    sort: 'newest',
+    sort: 'most-viewed',
     isLoading: true,
     error: ''
 };
