@@ -17,8 +17,6 @@ Aplikasi Web Portal Resmi **Politeknik Negeri Jakarta (PNJ)** beserta Dashboard 
 ### ⚙️ Backend (REST API Server)
 * **Native HTTP Server**: Dibangun murni menggunakan modul bawaan `http` Node.js tanpa framework pihak ketiga.
 * **JSON-Based Database**: Sistem basis data lokal menggunakan file JSON (`backend/db/`) dengan penanganan asynchronous read/write data yang aman.
-* **Autentikasi Aman**: Pencocokan kredensial login admin menggunakan enkripsi searah **SHA-256** melalui modul bawaan `crypto`.
-* **Modul Berkas Dinamis**: Mengunggah thumbnail artikel, gambar banner, dan logo departemen dengan metode enkripsi Base64 string.
 * **Modular Router**: Pembagian penanganan request API dipecah ke dalam folder `backend/route/` dan model data pada `backend/model/`.
 
 ---
