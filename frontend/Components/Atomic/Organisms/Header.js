@@ -2,17 +2,17 @@ import { button } from '../Atoms/Button.js';
 import { navLinks } from '../Molecules/NavLinks.js';
 
 export const header = ({ linkPrefix = '', activePage = 'home' } = {}) => {
-  const contactHref = './contact.html';
-  const links = [
-    { label: 'Profil', href: `${linkPrefix}#profil` },
-    { label: 'Akademik', href: `${linkPrefix}#akademik` },
-    { label: 'Kemahasiswaan', href: `${linkPrefix}#kemahasiswaan` },
-    { label: 'Kerjasama', href: `${linkPrefix}#kerjasama` },
-    { label: 'Berita', href: activePage === 'articles' ? './articles.html' : `${linkPrefix}#berita` },
-    { label: 'Pendaftaran', href: `${linkPrefix}#pendaftaran` },
-  ];
+    const contactHref = './contact.html';
+    const links = [
+        { label: 'Profil', href: `${linkPrefix}#profil` },
+        { label: 'Akademik', href: `${linkPrefix}#akademik` },
+        { label: 'Kerjasama', href: `${linkPrefix}#kerjasama` },
+        { label: 'Kemahasiswaan', href: `${linkPrefix}#kemahasiswaan` },
+        { label: 'Berita', href: activePage === 'articles' ? './articles.html' : `${linkPrefix}#berita` },
+        { label: 'Pendaftaran', href: `${linkPrefix}#pendaftaran` },
+    ];
 
-  return `
+    return `
     <header id="site-header" class="sticky top-0 z-50 bg-surface/80 backdrop-blur-md border-b border-outline-variant">
       <div class="max-w-[1440px] mx-auto flex justify-between items-center px-container-margin-mobile md:px-container-margin-desktop py-4">
         <a href="${linkPrefix || './index.html'}" class="flex items-center gap-4">

@@ -4,14 +4,14 @@ import { footer } from '../../Components/Atomic/Organisms/Footer.js';
 const app = document.getElementById('app');
 
 const escapeHtml = (value = '') => String(value)
-  .replace(/&/g, '&amp;')
-  .replace(/</g, '&lt;')
-  .replace(/>/g, '&gt;')
-  .replace(/"/g, '&quot;')
-  .replace(/'/g, '&#039;');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 
 const renderContactPage = () => {
-  app.innerHTML = `
+    app.innerHTML = `
     ${header({ linkPrefix: './index.html', activePage: 'contact' })}
     <main class="min-h-screen">
       <section class="bg-surface-container-low border-b border-outline-variant">
@@ -51,7 +51,7 @@ const renderContactPage = () => {
 
               <div>
                 <label class="block text-label-md font-bold text-on-surface mb-2" for="phone">Nomor Telepon</label>
-                <input id="phone" name="phone" type="tel" autocomplete="tel" required
+                <input id="phone" name="phone" type="tel" inputmode="numeric" pattern="[0-9]*" autocomplete="tel" required
                   class="w-full rounded-lg border-outline-variant bg-surface-container-lowest px-4 py-3 focus:border-primary focus:ring-primary"
                   placeholder="08xxxxxxxxxx" />
                 <p class="field-error mt-2 hidden text-label-sm text-error" data-error-for="phone"></p>
@@ -135,92 +135,102 @@ const renderContactPage = () => {
 };
 
 const setFieldError = (fieldName, message = '') => {
-  const error = document.querySelector(`[data-error-for="${fieldName}"]`);
-  const field = document.querySelector(`[name="${fieldName}"]`);
-  if (!error || !field) return;
+    const error = document.querySelector(`[data-error-for="${fieldName}"]`);
+    const field = document.querySelector(`[name="${fieldName}"]`);
+    if (!error || !field) return;
 
-  error.textContent = message;
-  error.classList.toggle('hidden', !message);
-  field.classList.toggle('border-error', Boolean(message));
+    error.textContent = message;
+    error.classList.toggle('hidden', !message);
+    field.classList.toggle('border-error', Boolean(message));
 };
 
 const showAlert = (type, message) => {
-  const alert = document.getElementById('contact-alert');
-  if (!alert) return;
+    const alert = document.getElementById('contact-alert');
+    if (!alert) return;
 
-  const isSuccess = type === 'success';
-  alert.className = `mb-6 rounded-lg border px-4 py-3 text-body-md ${isSuccess ? 'border-primary/30 bg-primary/10 text-primary' : 'border-error/30 bg-red-50 text-error'}`;
-  alert.textContent = message;
+    const isSuccess = type === 'success';
+    alert.className = `mb-6 rounded-lg border px-4 py-3 text-body-md ${isSuccess ? 'border-primary/30 bg-primary/10 text-primary' : 'border-error/30 bg-red-50 text-error'}`;
+    alert.textContent = message;
 };
 
 const validateForm = (form) => {
-  const data = Object.fromEntries(new FormData(form).entries());
-  const errors = {};
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const data = Object.fromEntries(new FormData(form).entries());
+    const errors = {};
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^[0-9]+$/;
 
-  if (!data.fullName?.trim()) errors.fullName = 'Nama lengkap wajib diisi.';
-  if (!data.email?.trim()) errors.email = 'Email wajib diisi.';
-  else if (!emailPattern.test(data.email)) errors.email = 'Format email belum valid.';
-  if (!data.phone?.trim()) errors.phone = 'Nomor telepon wajib diisi.';
-  if (!data.service) errors.service = 'Tujuan layanan wajib dipilih.';
-  if (!data.identity) errors.identity = 'Status pengirim wajib dipilih.';
-  if (!data.subject?.trim()) errors.subject = 'Subjek wajib diisi.';
-  if (!data.message?.trim()) errors.message = 'Pesan wajib diisi.';
-  else if (data.message.trim().length < 10) errors.message = 'Pesan minimal 10 karakter.';
+    if (!data.fullName || !data.fullName.trim()) errors.fullName = 'Nama lengkap wajib diisi.';
+    if (!data.email || !data.email.trim()) errors.email = 'Email wajib diisi.';
+    else if (!emailPattern.test(data.email)) errors.email = 'Format email belum valid.';
+    if (!data.phone || !data.phone.trim()) errors.phone = 'Nomor telepon wajib diisi.';
+    else if (!phonePattern.test(data.phone.trim())) errors.phone = 'Nomor telepon hanya boleh berisi angka.';
+    if (!data.service) errors.service = 'Tujuan layanan wajib dipilih.';
+    if (!data.identity) errors.identity = 'Status pengirim wajib dipilih.';
+    if (!data.subject || !data.subject.trim()) errors.subject = 'Subjek wajib diisi.';
+    if (!data.message || !data.message.trim()) errors.message = 'Pesan wajib diisi.';
+    else if (data.message.trim().length < 10) errors.message = 'Pesan minimal 10 karakter.';
 
-  ['fullName', 'email', 'phone', 'service', 'identity', 'subject', 'message'].forEach((field) => {
-    setFieldError(field, errors[field] || '');
-  });
+    ['fullName', 'email', 'phone', 'service', 'identity', 'subject', 'message'].forEach((field) => {
+        setFieldError(field, errors[field] || '');
+    });
 
-  return { isValid: Object.keys(errors).length === 0, data };
+    return { isValid: Object.keys(errors).length === 0, data };
 };
 
 const bindContactForm = () => {
-  const form = document.getElementById('contact-form');
-  if (!form) return;
+    const form = document.getElementById('contact-form');
+    if (!form) return;
 
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const { isValid, data } = validateForm(form);
-
-    if (!isValid) {
-      showAlert('error', 'Mohon lengkapi data yang diperlukan sebelum mengirim pesan.');
-      return;
+    const phoneInput = form.querySelector('[name="phone"]');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', () => {
+            phoneInput.value = phoneInput.value.replace(/\D/g, '');
+            setFieldError('phone', '');
+        });
     }
 
-    const submissions = JSON.parse(localStorage.getItem('pnjContactSubmissions') || '[]');
-    submissions.push({
-      ...data,
-      submittedAt: new Date().toISOString()
-    });
-    localStorage.setItem('pnjContactSubmissions', JSON.stringify(submissions));
+    form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const { isValid, data } = validateForm(form);
 
-    form.reset();
-    showAlert('success', 'Pesan berhasil dikirim.');
-  });
+        if (!isValid) {
+            showAlert('error', 'Mohon lengkapi data yang diperlukan sebelum mengirim pesan.');
+            return;
+        }
+
+        const submissions = JSON.parse(localStorage.getItem('pnjContactSubmissions') || '[]');
+        submissions.push({
+            ...data,
+            submittedAt: new Date().toISOString()
+        });
+        localStorage.setItem('pnjContactSubmissions', JSON.stringify(submissions));
+
+        form.reset();
+        showAlert('success', 'Pesan berhasil dikirim.');
+    });
 };
 
 const bindMobileMenu = () => {
-  const hamburgerBtn = document.getElementById('hamburger-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-  if (!hamburgerBtn || !mobileMenu) return;
+    if (!hamburgerBtn || !mobileMenu) return;
 
-  hamburgerBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-    mobileMenu.classList.toggle('flex');
-  });
-
-  mobileMenu.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      mobileMenu.classList.add('hidden');
-      mobileMenu.classList.remove('flex');
+    hamburgerBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+        mobileMenu.classList.toggle('flex');
     });
-  });
+
+    mobileMenu.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('flex');
+        });
+    });
 };
 
 if (app) {
-  renderContactPage();
-  bindMobileMenu();
-  bindContactForm();
+    renderContactPage();
+    bindMobileMenu();
+    bindContactForm();
 }
